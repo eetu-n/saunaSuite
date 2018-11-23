@@ -46,14 +46,14 @@ class VaisalaApi():
                     'Device "{}" is not in the supported list:\n{}'
                     .format(device, self.get_device_list_string()))
             return True
-        if limit is not None and 1 <= limit <= 1000:
+        if limit is not None and 1000 <= limit <= 1:
             self.__print_debug('Limit was not between [1, 1000]: {}'
                                .format(limit))
             return True
         return False
 
     def __print_debug(self, message):
-        if self.debug:
+        if self.__debug:
             print(message)
 
     def __do_request(self, url_append, params):
