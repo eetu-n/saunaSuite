@@ -1,131 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Sauna Suite</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>Sauna Suite</title>
 
-  <!-- CSS  -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="{{ url_for('static', filename = 'css/materialize.css') }}" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="{{ url_for('static', filename = 'css/style.css') }}" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="{{ url_for('static', filename = 'css/materialize.css') }}" type="text/css" rel="stylesheet"
+          media="screen,projection"/>
+    <link href="{{ url_for('static', filename = 'css/style.css') }}" type="text/css" rel="stylesheet"
+          media="screen,projection"/>
 
-  <!-- Chart Scripts -->
-  <script type="text/javascript">
-    window.onload = function () {
-        var chart = new CanvasJS.Chart("temperature", {
-            animationEnabled: true,
-            theme: "dark2",
-            data: [{
-                type: "doughnut",
-                innerRadius: "95%",
-                startAngle: 54,
-                dataPoints: [
-                    { y: 20, color:  "#555555"},
-                    { y: 40, color:  "#555555" },
-                    { y: 40, color:  "#555555" }
+    <!-- Scripts -->
+    <script type="text/javascript">
+        window.onload = function () {
+
+            temperature = {{curTemp}}
+
+            var chart = new CanvasJS.Chart("temperature", {
+                title: {
+                    fontColor: "#848484",
+                    fontSize: 30,
+                    horizontalAlign: "center",
+                    text: CanvasJS.formatNumber(temperature) + "°C",
+                    verticalAlign: "center"
+                },
+                animationEnabled: true,
+                theme: "light1",
+                data: [{
+                    type: "doughnut",
+                    explodeOnClick: false,
+                    innerRadius: "90%",
+                    startAngle: 54,
+                    dataPoints: [
+                        {y: 20, color: "#fffffff", toolTipContent: null},
+                        {y: (temperature / 150) * 80, color: "#E0565A", toolTipContent: null},
+                        {y: ((150 - temperature) / 150) * 80, color: "#3A9678", toolTipContent: null}
                     ]
-            }]
-        });
+                }]
+            });
 
-        humidity={{curHumi}}
+            humidity = {{curHumi}}
 
-        var chart2 = new CanvasJS.Chart("humidity", {
-            title:{
-                fontColor: "#848484",
-                fontSize: 70,
-                horizontalAlign: "center",
-                text: CanvasJS.formatNumber(humidity) + "%",
-				verticalAlign: "center"
-            },
-            animationEnabled: true,
-            theme: "dark2",
-            data: [{
-                type: "doughnut",
-                innerRadius: "95%",
-                startAngle: 54,
-                dataPoints: [
-                    { y: 20, color:  "#000000"},
-                    { y: humidity * .8, color:  "#555555", toolTipContent: CanvasJS.formatNumber(humidity) },
-                    { y: (100 - humidity) * .8, color:  "#f3f3f3", toolTipContent: null }
+            var chart2 = new CanvasJS.Chart("humidity", {
+                title: {
+                    fontColor: "#848484",
+                    fontSize: 30,
+                    horizontalAlign: "center",
+                    text: CanvasJS.formatNumber(humidity) + "%",
+                    verticalAlign: "center"
+                },
+                animationEnabled: true,
+                theme: "light1",
+                data: [{
+                    type: "doughnut",
+                    explodeOnClick: false,
+                    innerRadius: "90%",
+                    startAngle: 54,
+                    dataPoints: [
+                        {y: 20, color: "#ffffff", toolTipContent: null},
+                        {y: humidity * .8, color: "#E0565A", toolTipContent: null},
+                        {y: (100 - humidity) * .8, color: "#3A9678", toolTipContent: null}
                     ]
-            }]
-        });
+                }]
+            });
 
-        chart.render();
-        chart2.render();
-  }
-</script>
+            chart.render();
+            chart2.render();
+        }
+    </script>
 
 </head>
 <body>
-  <nav class="light-blue lighten-1" role="navigation">
-    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
-      <ul class="right hide-on-med-and-down">
-        <li><a href="#">Navbar Link</a></li>
-      </ul>
+<nav class="light-blue lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Sauna Suite</a>
+        <ul class="right hide-on-med-and-down">
+            <li><input type="text" class="timepicker"></li>
+        </ul>
 
-      <ul id="nav-mobile" class="sidenav">
-        <li><a href="#">Navbar Link</a></li>
-      </ul>
-      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul id="nav-mobile" class="sidenav">
+            <li><a href="#">Navbar Link</a></li>
+        </ul>
+        <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
     </div>
-  </nav>
-  <div class="section no-pad-bot" id="index-banner">
+</nav>
+<!--<div class="section no-pad-bot" id="index-banner">
     <div class="container">
-      <br><br>
-      <h1 class="header center orange-text">Sauna Suite</h1>
+        <h1 class="header center orange-text">Sauna Suite</h1>
     </div>
-  </div>
+</div>-->
 
-  <div class="container">
+<div class="container">
     <div class="section">
-      <div class="row">
-        <div class="col s12 m4">
-          <div class="icon-block">
-            <h5 class="center">Humidity</h5>
-              <div id="humidity" style="height: 200px; width:100%;"></div>
-          </div>
-        </div>
+        <div class="row">
+            <div class="col s12 m4">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Humidity</span>
+                        <div id="humidity" style="height: 200px; width:100%;"></div>
+                    </div>
+                </div>
+            </div>
 
-        <div class="col s12 m4">
-          <div class="icon-block">
-            <h5 class="center">Temperature</h5>
-            <div id="temperature" style="height: 200px; width: 100%;"></div>
-          </div>
-        </div>
+            <div class="col s12 m4">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Temperature</span>
+                        <div id="temperature" style="height: 200px; width: 100%;"></div>
 
-        <div class="col s12 m4">
-          <div class="icon-block">
-            <h5 class="center">Statistics</h5>
+                    </div>
+                </div>
+            </div>
 
-            <p class="light">
-              <h6>Löyly: {{loyly}}</h6><br>
-              <h6>Logs: {{logs}}</h6><br>
-            </p>
-          </div>
+            <div class="col s12 m4">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Statistics</span>
+                        From {{timeBegin}} to {{timeEnd}}
+                        <ul class="collection">
+                            <li class="collection-item">Löyly thrown: {{loylyThrown}}</li>
+                            <li class="collection-item">Logs used: {{logsUsed}}</li>
+                        </ul>
+                        <a class="waves-effect waves-light btn modal-trigger orange" href="#time">Time Interval</a>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+        <div class="row">
+            <div class="col s4">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Recommendations</span>
+                        <ul class="collection">
+                            <li class="collection-item">Time for next log: {{nextLog}}</li>
+                            <li class="collection-item">Sauna will stay warm until: {{warmUntil}}</li>
+                        </ul>
+                        <a class="waves-effect waves-light btn modal-trigger orange" href="#targets">Targets</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <br><br>
-  </div>
+</div>
 
-  <footer class="page-footer orange">
-    <div class="container">
-      <div class="row">
-        <div class="col l6 s12">
-          <p>In case we want a footer</p>
-        </div>
-      </div>
+<!-- Modals -->
+<div id="time" class="modal bottom-sheet">
+    <form method="post" id="timeForm">
+    <div class="modal-content">
+        <h4>Time Interval</h4>
+        <ul class="collection">
+                <li class="collection-item">Start: <input type="text" name="timeBegin" class="timepicker"></li>
+                <li class="collection-item">End: <input type="text" name="timeEnd" class="timepicker"></li>
+        </ul>
     </div>
-  </footer>
+    <div class="modal-footer">
+        <button type="submit" form="timeForm" class="modal-action modal-close waves-effect waves-green btn-flat">Submit
+        </button>
+    </div>
+</div>
+
+<div id="targets" class="modal bottom-sheet">
+    <div class="modal-content">
+        <h4>Targets</h4>
+        <ul class="collection">
+            <li class="collection-item">Temperature target: </li>
+            <li class="collection-item">TIme to stay heated: </li>
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Submit</a>
+    </div>
+</div>
+
+<!-- footer -->
+<footer class="page-footer orange">
+    <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <p>In case we want a footer</p>
+            </div>
+        </div>
+    </div>
+</footer>
 
 
-  <!--  Scripts-->
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src = "{{ url_for('static', filename = 'js/materialize.js') }}"></script>
-  <script src = "{{ url_for('static', filename = 'js/init.js') }}"></script>
-  <script src = "{{ url_for('static', filename = 'js/canvasjs.min.js') }}"></script>
+<!--  Scripts-->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="{{ url_for('static', filename = 'js/materialize.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/init.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/canvasjs.min.js') }}"></script>
 
-  </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.timepicker');
+        var options = {twelveHour: false};
+        var instances = M.Timepicker.init(elems, options);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.modal');
+        var options = null
+        var instances = M.Modal.init(elems, options);
+    });
+</script>
+
+</body>
 </html>
