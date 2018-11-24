@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from src.api_class import VaisalaApi
+from api.api_class import VaisalaApi
 app = Flask(__name__)
 
 apiCaller = VaisalaApi()
