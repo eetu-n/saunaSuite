@@ -1,13 +1,15 @@
 from flask import Flask, render_template
-from api.api_class import VaisalaApi
+from api.wrappers import ApiWrappers
+
 app = Flask(__name__)
 
-apiCaller = VaisalaApi()
+apiCaller = ApiWrappers()
+
 
 @app.route('/')
 def index():
-    temp = apiCaller.get_latest_device("Bench2").json()[0]["Measurements"]["Temperature"]["value"]
-    humi = apiCaller.get_latest_device("Bench2").json()[0]["Measurements"]["Relative humidity"]["value"]
+    temp = apiCaller.get_temp()
+    humi = apiCaller.get_humidity()
     loylyThrown = 8
     logsUsed = 5
     return render_template('index.html', curTemp=temp, curHumi=humi, loyly=loylyThrown, logs=logsUsed)
