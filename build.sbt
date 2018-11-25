@@ -13,7 +13,15 @@ libraryDependencies ++= Seq(
 
 libraryDependencies +=  "org.scalaj" %% "scalaj-http" % "2.4.1"
 
-//resolvers += "Typesafe Repo" at "http://repo.typesafe.com/typesafe/releases/"
-//libraryDependencies += "com.typesafe.play" %% "play-json" % "2.9.3"
-
 libraryDependencies += "com.typesafe.play" %% "play-json" % "2.6.10"
+
+val breezeVersion = "0.13.2"
+
+libraryDependencies  ++= Seq(
+  "org.scalanlp" %% "breeze" % breezeVersion,
+  "org.scalanlp" %% "breeze-natives" % breezeVersion,
+  "org.scalanlp" %% "breeze-viz" % breezeVersion
+)
+
+resolvers += "Sonatype Releases" at "https://oss.sonatype.org/content/repositories/releases/"
+

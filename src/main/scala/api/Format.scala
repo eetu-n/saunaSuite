@@ -2,7 +2,7 @@ package api
 
 import play.api.libs.json._
 import scalaj.http.HttpResponse
-import spark.Vaisalytics
+import spark.{VaisalaMeasurement, Vaisalytics}
 
 object Format {
 
@@ -58,12 +58,15 @@ object Format {
     res
   }
 
-  def convertDeviceHttpResponse(device: String, limit: Int = 1): Unit =
+  def convertFromJsValue(jsValue: JsValue): List[Vaisalytics] =
+    extractJsPairs(jsValue)
+      .map(convertJsPair)
+
+  def convertDeviceHttpResponse(device: String, limit: Int = 1): List[Vaisalytics] =
     convertDeviceHttpResponse(Api.getDevice(device, limit))
 
   def convertDeviceHttpResponse(response: HttpResponse[JsValue]): List[Vaisalytics] =
-    extractJsPairs(response.body)
-      .map(convertJsPair)
+    convertFromJsValue(response.body)
 
   def convertHistoryHttpRequest(device: String, after: Long, before: Long): List[Vaisalytics] =
     convertDeviceHttpResponse(Api.getHistory(device, after, before))
@@ -74,5 +77,9 @@ object Format {
         seq.flatMap(value => extractJsPairs(value).map(convertJsPair)).toVector
     }
   }
+
+  def convertToVaisalaMeasurement(sensor: String, analytics: Seq[Vaisalytics]): Seq[VaisalaMeasurement] =
+    analytics
+      .map(analytic => VaisalaMeasurement(sensor, analytic))
 
 }
